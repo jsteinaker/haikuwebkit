@@ -37,6 +37,11 @@
 #include <wtf/unix/UnixFileDescriptor.h>
 #endif
 
+#if PLATFORM(HAIKU)
+#include <OS.h>
+#include <String.h>
+#endif
+
 namespace IPC {
 
 // IPC::Attachment is a type representing objects that cannot be transferred as data,
@@ -69,6 +74,13 @@ public:
     using CustomWriterFunc = WTF::Function<void(SocketDescriptor)>;
     using CustomWriter = std::variant<CustomWriterFunc, SocketDescriptor>;
     Attachment(CustomWriter&&);
+#if PLATFORM(HAIKU)
+	Attachment(team_id connectionInfo,uint32_t key)
+		: m_connectionID(connectionInfo),
+		m_key(key)
+	{
+	}    
+#endif
 
     Type type() const { return m_type; }
 
@@ -78,6 +90,21 @@ public:
     UnixFileDescriptor release() { return std::exchange(m_fd, UnixFileDescriptor { }); }
 
     const CustomWriter& customWriter() const { return m_customWriter; }
+<<<<<<< HEAD
+=======
+#elif OS(DARWIN)
+    void release();
+
+    // MachPortType
+    mach_port_name_t port() const { return m_port; }
+    mach_msg_type_name_t disposition() const { return m_disposition; }
+#elif OS(WINDOWS)
+    HANDLE handle() const { return m_handle; }
+#elif PLATFORM(HAIKU)
+	team_id connectionID () const { return m_connectionID; }
+	uint32_t key () const { return m_key; }
+#endif
+>>>>>>> c31f72459c (IPC for haiku)
 
     void encode(Encoder&) const;
     static std::optional<Attachment> decode(Decoder&);
@@ -86,6 +113,18 @@ private:
 
     UnixFileDescriptor m_fd;
     CustomWriter m_customWriter;
+<<<<<<< HEAD
+=======
+#elif OS(DARWIN)
+    mach_port_name_t m_port { 0 };
+    mach_msg_type_name_t m_disposition { 0 };
+#elif OS(WINDOWS)
+    HANDLE m_handle { INVALID_HANDLE_VALUE };
+#elif PLATFORM(HAIKU)
+	team_id m_connectionID;
+	uint32_t m_key;
+#endif
+>>>>>>> c31f72459c (IPC for haiku)
 };
 #endif
 
