@@ -33,6 +33,7 @@
 #endif
 
 #if USE(HAIKU)
+#include <WebCore/BitmapImage.h>
 #include <View.h>
 #endif
 
@@ -76,6 +77,11 @@ private:
     WebPageProxy& m_webPageProxy;
 #if USE(CAIRO)
     std::unique_ptr<WebCore::BackingStoreBackendCairo> m_backend;
+#endif
+#if PLATFORM(HAIKU)
+    // FIXME move these into a BackingStoreBackendHaiku class
+    WebCore::PlatformImagePtr m_bitmap;
+    BView* m_surface;
 #endif
 };
 
