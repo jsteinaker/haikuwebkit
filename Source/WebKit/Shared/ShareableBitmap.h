@@ -38,6 +38,10 @@
 #include "StillImageHaiku.h"
 #endif
 
+#if PLATFORM(HAIKU)
+#include <WebCore/BitmapImage.h>
+#endif
+
 namespace WebCore {
 class Image;
 class GraphicsContext;
@@ -150,6 +154,10 @@ private:
 
 #if USE(CAIRO)
     static void releaseSurfaceData(void* typelessBitmap);
+#endif
+
+#if PLATFORM(HAIKU)
+    WebCore::BitmapRef* bitmapObject() const;
 #endif
 
     WebCore::IntSize m_size;
