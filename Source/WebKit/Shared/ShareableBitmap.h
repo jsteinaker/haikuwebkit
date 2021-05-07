@@ -33,8 +33,9 @@
 #include <wtf/RefPtr.h>
 #include <wtf/ThreadSafeRefCounted.h>
 
-#if USE(CG)
-#include "ColorSpaceData.h"
+#if PLATFORM(HAIKU)
+#include <WebCore/PlatformImage.h>
+#include "StillImageHaiku.h"
 #endif
 
 namespace WebCore {
