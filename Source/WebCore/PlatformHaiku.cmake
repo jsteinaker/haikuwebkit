@@ -1,6 +1,7 @@
 include(platform/Haiku.cmake)
 include(platform/ImageDecoders.cmake)
 include(platform/OpenSSL.cmake)
+include(platform/TextureMapper.cmake)
 
 if(USE_CURL)
   include(platform/Curl.cmake)
