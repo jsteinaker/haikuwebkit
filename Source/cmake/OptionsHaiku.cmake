@@ -33,7 +33,6 @@ set(USE_ANGLE_EGL OFF)
 #		string(REGEX REPLACE "-DNDEBUG" "-UNDEBUG" ${flag_var} "${${flag_var}}")
 #	endif(${flag_var} MATCHES "-DNDEBUG")
 #endforeach(flag_var)
-#set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -fvisibility-inlines-hidden")
 
 FIND_PACKAGE(SQLite3 REQUIRED)
 FIND_PACKAGE(LibXml2 2.8.0 REQUIRED)
@@ -120,7 +119,6 @@ set(USE_3D_GRAPHICS 0)
 add_definitions(-DUSE_3D_GRAPHICS=0)
 
 if (ENABLE_WEBGL)
-    find_package(OpenGL REQUIRED)
     option(ENABLE_EGL ON)
 
     if (ENABLE_EGL)
@@ -131,13 +129,8 @@ if (ENABLE_WEBGL)
 		SET_AND_EXPOSE_TO_BUILD(USE_EGL TRUE)
         option(ENABLE_GLES2 ON)
 
-        if (ENABLE_GLES2)
-            find_package(GLES REQUIRED)
-        endif ()
-
         if (OPENGLES2_FOUND)
             set(USE_OPENGL_ES_2 1)
-            add_definitions(-DUSE_OPENGL_ES_2=1)
         endif ()
     endif ()
 
@@ -181,7 +174,7 @@ if (CMAKE_COMPILER_IS_GNUCC AND "${LOWERCASE_CMAKE_HOST_SYSTEM_PROCESSOR}" STREQ
 	string(APPEND CMAKE_CXX_FLAGS " -march=pentium4")
 endif()
 
-SET_AND_EXPOSE_TO_BUILD(USE_TEXTURE_MAPPER OFF)
+SET_AND_EXPOSE_TO_BUILD(USE_TEXTURE_MAPPER ON)
 SET_AND_EXPOSE_TO_BUILD(USE_TEXTURE_MAPPER_GL OFF)
 SET_AND_EXPOSE_TO_BUILD(ENABLE_GRAPHICS_CONTEXT_GL OFF)
 SET_AND_EXPOSE_TO_BUILD(USE_EGL FALSE)
