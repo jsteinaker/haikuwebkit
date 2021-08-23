@@ -107,7 +107,8 @@ RefPtr<ShareableBitmap> ShareableBitmap::create(const IntSize& size, Configurati
     auto numBytes = numBytesForSize(size, configuration);
     if (numBytes.hasOverflowed())
         return nullptr;
-#if PLATFORM(HAIKU)
+
+#if 0 && PLATFORM(HAIKU)
     	RefPtr<SharedMemory> sharedMemory = SharedMemory::bitmapAllocate(size);
 #else
 		RefPtr<SharedMemory> sharedMemory = SharedMemory::allocate(numBytes);
