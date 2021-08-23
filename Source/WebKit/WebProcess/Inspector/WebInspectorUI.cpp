@@ -107,7 +107,7 @@ void WebInspectorUI::updateConnection()
     m_backendConnection = IPC::Connection::createServerConnection(connectionIdentifiers->server);
     m_backendConnection->open(*this);
 
-    WebProcess::singleton().parentProcessConnection()->send(Messages::WebInspectorUIProxy::SetFrontendConnection(connectionIdentifiers->client), m_inspectedPageIdentifier);
+    WebProcess::singleton().parentProcessConnection()->send(Messages::WebInspectorUIProxy::SetFrontendConnection(connectionClientPort), m_inspectedPageIdentifier);
 }
 
 void WebInspectorUI::windowObjectCleared()
