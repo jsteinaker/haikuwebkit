@@ -33,6 +33,7 @@
 #include "SandboxInitializationParameters.h"
 #include "WebPageProxyIdentifier.h"
 #include <WebCore/LogInitialization.h>
+#include <WebCore/NotImplemented.h>
 #include <pal/SessionID.h>
 #include <wtf/LogInitialization.h>
 #include <wtf/SetForScope.h>
