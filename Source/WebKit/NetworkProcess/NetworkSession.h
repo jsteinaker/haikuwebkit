@@ -37,6 +37,7 @@
 #include "ServiceWorkerSoftUpdateLoader.h"
 #include "WebPageProxyIdentifier.h"
 #include "WebResourceLoadStatisticsStore.h"
+#include "WebPageProxyIdentifier.h"
 #include <WebCore/BlobRegistryImpl.h>
 #include <WebCore/FetchIdentifier.h>
 #include <WebCore/NetworkStorageSession.h>
