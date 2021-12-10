@@ -169,4 +169,9 @@ RunLoop::CycleResult RunLoop::cycle(RunLoopMode)
     return CycleResult::Continue;
 }
 
+Seconds RunLoop::TimerBase::secondsUntilFire() const
+{
+    // FIXME implement
+    return 0_s;
+}
 }
