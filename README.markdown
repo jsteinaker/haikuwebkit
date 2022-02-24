@@ -14,8 +14,8 @@ checkout to about 600MB.
 
 ### Requirements ###
 
-- A recent version of Haiku
-- The GCC8 development tools
+- A recent version of Haiku (beta2 is too old, it lacks at least madvise() and support for compositing draw operations)
+- The GCC11 development tools
 - The dependencies as listed below
 - At least about 2G of RAM
 - Preferably a fast computer!
@@ -81,6 +81,13 @@ This will build a release version of WebKit libraries on a quad core cpu.
 
 On a successful build, executables and libraries are generated in the WebKitBuild/Release directory.
 
+<<<<<<< HEAD
+=======
+##### NOTE:
+If you are getting "out of memory" error despite having sufficient memory, disable ASLR:
+	$ export DISABLE_ASLR=1
+
+>>>>>>> e9a6c234d4 (Updated README)
 ### Advanced Build, other targets ###
 
 The following make targets are available:
@@ -114,7 +121,7 @@ It is a good idea to set the NUMBER\_OF\_PROCESSORS environment variable as well
 the local CPUs will be counted, leading to a sub-optimal distcc distribution.
 
 distcc will look for a compiler named gcc-x86 and g++-x86. You'll need to adjust
-the path on the slaves to get that pointing to the gcc8 version (the gcc8 compiler
+the path on the slaves to get that pointing to the gcc11 version (the gcc11 compiler
 is already visible under this name on the local machine and haiku slaves).
 CMake usually tries to resolve the compiler to an absolute path on the first
 time it is called, but this doesn't work when the compiler is called through
