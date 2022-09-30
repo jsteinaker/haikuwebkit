@@ -40,12 +40,12 @@ namespace WebCore {
 
 static String getSystemSoftwareName()
 {
-    return "Haiku";
+    return makeString("Haiku");
 }
 
 static String getSystemSoftwareVersion()
 {
-    return "R1";
+    return makeString("R1");
 }
 
 static constexpr const char* versionForUAString()
@@ -77,7 +77,7 @@ String standardUserAgent(const String& applicationName, const String& applicatio
 
     String finalApplicationVersion = applicationVersion;
     if (finalApplicationVersion.isEmpty())
-        finalApplicationVersion = versionForUAString();
+        finalApplicationVersion = makeString(versionForUAString());
 
     return makeString(standardUserAgentStatic(), ' ', applicationName, '/', finalApplicationVersion);
 }
