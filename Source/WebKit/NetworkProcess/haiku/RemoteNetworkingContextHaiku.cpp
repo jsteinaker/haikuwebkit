@@ -23,26 +23,3 @@
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
-#include "RemoteNetworkingContext.h"
-
-#include "NetworkProcess.h"
-#include "NetworkSession.h"
-#include "WebsiteDataStoreParameters.h"
-#include <WebCore/NetworkStorageSession.h>
-
-namespace WebKit {
-
-using namespace WebCore;
-
-void RemoteNetworkingContext::ensureWebsiteDataStoreSession(NetworkProcess& networkProcess, WebsiteDataStoreParameters&& parameters)
-{
-    auto sessionID = parameters.networkSessionParameters.sessionID;
-    if (networkProcess.storageSession(sessionID))
-        return;
-
-    networkProcess.ensureSession(sessionID, false, String::number(sessionID.toUInt64()));
-    networkProcess.setSession(sessionID, NetworkSession::create(networkProcess, WTFMove(parameters.networkSessionParameters)));
-}
-
-}

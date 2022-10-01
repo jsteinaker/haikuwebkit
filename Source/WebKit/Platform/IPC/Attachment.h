@@ -96,6 +96,11 @@ public:
 private:
     Type m_type;
 
+#if PLATFORM(HAIKU)
+	team_id m_connectionID;
+	uint32_t m_key;
+#endif
+
     UnixFileDescriptor m_fd;
     CustomWriter m_customWriter;
 };

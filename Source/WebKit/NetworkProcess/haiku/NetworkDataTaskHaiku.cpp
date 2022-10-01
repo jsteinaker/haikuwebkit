@@ -123,9 +123,9 @@ void NetworkDataTaskHaiku::createRequest(ResourceRequest&& request)
         if (!m_client)
             return;
 
-        ResourceError error("BUrlProtocol", 42,
+        ResourceError error(makeString("BUrlProtocol"), 42,
             m_baseUrl,
-            "The service kit failed to start the request.");
+            makeString("The service kit failed to start the request."));
             
         m_networkLoadMetrics.responseEnd = MonotonicTime::now();
         m_networkLoadMetrics.markComplete();
@@ -173,18 +173,18 @@ void NetworkDataTaskHaiku::HeadersReceived(BUrlRequest* caller)
 
     const BHttpResult* httpResult = dynamic_cast<const BHttpResult*>(&caller->Result());
 
-    WTF::String contentType = caller->Result().ContentType();
+    WTF::String contentType = makeString(caller->Result().ContentType().String());
     int contentLength = caller->Result().Length();
     URL url;
 
-    WTF::String encoding = extractCharsetFromMediaType(contentType);
+    WTF::String encoding = extractCharsetFromMediaType(contentType).toString();
     WTF::String mimeType = extractMIMETypeFromMediaType(contentType);
 
     if (httpResult) {
         url = URL(httpResult->Url());
 
-        BString location = httpResult->Headers()["Location"];
-        if (location.Length() > 0) {
+        String location = makeString(httpResult->Headers()["Location"]);
+        if (!location.isEmpty()) {
             m_redirected = true;
             url = URL(url, location);
         } else {
@@ -200,19 +200,19 @@ void NetworkDataTaskHaiku::HeadersReceived(BUrlRequest* caller)
         int statusCode = httpResult->StatusCode();
 
         String suggestedFilename = filenameFromHTTPContentDisposition(
-            httpResult->Headers()["Content-Disposition"]);
+            makeString(httpResult->Headers()["Content-Disposition"])).toString();
 
         if (!suggestedFilename.isEmpty())
             response.setSuggestedFilename(suggestedFilename);
 
         response.setHTTPStatusCode(statusCode);
-        response.setHTTPStatusText(httpResult->StatusText());
+        response.setHTTPStatusText(makeAtomString(httpResult->StatusText().String()));
 
         // Add remaining headers.
         const BHttpHeaders& resultHeaders = httpResult->Headers();
         for (int i = 0; i < resultHeaders.CountHeaders(); i++) {
             BHttpHeader& headerPair = resultHeaders.HeaderAt(i);
-            response.setHTTPHeaderField(headerPair.Name(), headerPair.Value());
+            response.setHTTPHeaderField(makeString(headerPair.Name()), makeString(headerPair.Value()));
         }
 
         if (statusCode == 401) {
@@ -235,8 +235,8 @@ void NetworkDataTaskHaiku::HeadersReceived(BUrlRequest* caller)
         m_redirectionTries--;
 
         if (m_redirectionTries == 0) {
-            ResourceError error(url.host().utf8().data(), 400, url,
-                "Redirection limit reached");
+            ResourceError error(makeString(url.host().utf8().data()), 400, url,
+                makeString("Redirection limit reached"));
 
             m_networkLoadMetrics.responseEnd = MonotonicTime::now();
             m_networkLoadMetrics.markComplete();
@@ -254,7 +254,7 @@ void NetworkDataTaskHaiku::HeadersReceived(BUrlRequest* caller)
 
             m_startTime = MonotonicTime::now();//network metrics
 
-            if( m_state != State::Suspended ){
+            if (m_state != State::Suspended) {
                 m_state = State::Suspended;
                 resume();
             }
@@ -262,11 +262,11 @@ void NetworkDataTaskHaiku::HeadersReceived(BUrlRequest* caller)
 
     } else {
         ResourceResponse responseCopy = response;
-        m_client->didReceiveResponse(WTFMove(responseCopy), NegotiatedLegacyTLS::No, [this](WebCore::PolicyAction policyAction){
-            if(m_state == State::Canceling || m_state == State::Completed){
+        m_client->didReceiveResponse(WTFMove(responseCopy), NegotiatedLegacyTLS::No,
+        	PrivateRelayed::No, [this](WebCore::PolicyAction policyAction){
+            if (m_state == State::Canceling || m_state == State::Completed)
                 return;
-            }
-            });
+        });
     }
 }
 void NetworkDataTaskHaiku::BytesWritten(BUrlRequest* caller, size_t size)

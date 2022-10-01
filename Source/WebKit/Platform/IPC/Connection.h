@@ -215,12 +215,7 @@ public:
     std::optional<audit_token_t> getAuditToken();
     pid_t remoteProcessID() const;
 #elif OS(WINDOWS)
-<<<<<<< HEAD
     static bool createServerAndClientIdentifiers(HANDLE& serverIdentifier, HANDLE& clientIdentifier);
-=======
-    typedef HANDLE Identifier;
-    static bool createServerAndClientIdentifiers(Identifier& serverIdentifier, Identifier& clientIdentifier);
-    static bool identifierIsValid(Identifier identifier) { return !!identifier; }
 #elif PLATFORM(HAIKU)
     struct connectionData
     {
@@ -232,7 +227,6 @@ public:
     void prepareIncomingMessage(BMessage*);
     void finalizeConnection(BMessage*);
     team_id getConnection() { return m_connectedProcess.connectedProcess; }
->>>>>>> c31f72459c (IPC for haiku)
 #endif
 
     static Ref<Connection> createServerConnection(Identifier);
